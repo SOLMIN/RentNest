@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: rentnest
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOW_MEMORY_FALLBACK
+        value: "false"
+      - key: MONGODB_URI
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false
