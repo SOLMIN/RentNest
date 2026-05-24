@@ -5,6 +5,7 @@ import Header from "./components/shared/Header";
 import Marketplace from "./components/marketplace/Marketplace";
 import AdminPortal from "./components/admin/AdminPortal";
 import { normalizeCurrency } from "./utils/formatters";
+import { Button, ErrorMain, Heading1, Main, Paragraph, Shell, Toast } from "./App.styles";
 
 function App() {
   const [view, setView] = useState("marketplace");
@@ -67,20 +68,20 @@ function App() {
   const activeCategories = useMemo(() => categories.filter((category) => category.active !== false), [categories]);
 
   return (
-    <div className="app-shell">
+    <Shell className="app-shell">
       <Header view={view} setView={setView} health={health} />
       {error ? (
-        <main className="error-screen">
+        <ErrorMain className="error-screen">
           <Package aria-hidden="true" />
-          <h1>API connection needs attention</h1>
-          <p>{error}</p>
-          <button className="primary-action" type="button" onClick={loadData}>
+          <Heading1>API connection needs attention</Heading1>
+          <Paragraph>{error}</Paragraph>
+          <Button className="primary-action" type="button" onClick={loadData}>
             <RotateCcw aria-hidden="true" />
             Retry
-          </button>
-        </main>
+          </Button>
+        </ErrorMain>
       ) : (
-        <main>
+        <Main>
           {view === "marketplace" ? (
             <Marketplace
               listings={listings}
@@ -111,12 +112,12 @@ function App() {
               notify={notify}
             />
           )}
-        </main>
+        </Main>
       )}
-      <div className={`toast ${toast ? "show" : ""}`} role="status" aria-live="polite">
+      <Toast className={`toast ${toast ? "show" : ""}`} role="status" aria-live="polite">
         {toast}
-      </div>
-    </div>
+      </Toast>
+    </Shell>
   );
 }
 

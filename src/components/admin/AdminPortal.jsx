@@ -21,25 +21,51 @@ import { api } from "../../services/api";
 import { categoryImages, emptyListing, serviceLocalities } from "../../constants/marketplace";
 import { getId } from "../../utils/formatters";
 import StatusPill from "../shared/StatusPill";
+import {
+  Article,
+  Aside,
+  Box,
+  Button,
+  Form,
+  Heading1,
+  Heading2,
+  Heading3,
+  Input,
+  Label,
+  Nav,
+  Option,
+  Paragraph,
+  Section,
+  Select,
+  Span,
+  Strong,
+  Table,
+  Tbody,
+  Td,
+  Textarea,
+  Th,
+  Thead,
+  Tr,
+} from "./styles";
 
 export default function AdminPortal({ listings, categories, bookings, settings, metrics, money, reload, notify }) {
   const [tab, setTab] = useState("overview");
   return (
-    <section className="admin-shell" aria-label="Admin portal">
-      <aside className="admin-sidebar">
-        <p className="eyebrow">Admin</p><h1>Business command center</h1>
-        <nav aria-label="Admin sections">
-          {[["overview", LayoutDashboard, "Overview"], ["inventory", Boxes, "Inventory"], ["bookings", ClipboardList, "Bookings"], ["categories", Tags, "Categories"], ["settings", Settings, "Settings"]].map(([key, Icon, label]) => <button className={tab === key ? "active" : ""} key={key} type="button" onClick={() => setTab(key)}><Icon aria-hidden="true" />{label}</button>)}
-        </nav>
-      </aside>
-      <div className="admin-main">
+    <Section className="admin-shell" aria-label="Admin portal">
+      <Aside className="admin-sidebar">
+        <Paragraph className="eyebrow">Admin</Paragraph><Heading1>Business command center</Heading1>
+        <Nav aria-label="Admin sections">
+          {[["overview", LayoutDashboard, "Overview"], ["inventory", Boxes, "Inventory"], ["bookings", ClipboardList, "Bookings"], ["categories", Tags, "Categories"], ["settings", Settings, "Settings"]].map(([key, Icon, label]) => <Button className={tab === key ? "active" : ""} key={key} type="button" onClick={() => setTab(key)}><Icon aria-hidden="true" />{label}</Button>)}
+        </Nav>
+      </Aside>
+      <Box className="admin-main">
         {tab === "overview" ? <Overview metrics={metrics} bookings={bookings} money={money} settings={settings} /> : null}
         {tab === "inventory" ? <InventoryManager listings={listings} categories={categories} money={money} reload={reload} notify={notify} /> : null}
         {tab === "bookings" ? <BookingManager bookings={bookings} money={money} reload={reload} notify={notify} /> : null}
         {tab === "categories" ? <CategoryManager categories={categories} reload={reload} notify={notify} /> : null}
         {tab === "settings" ? <SettingsManager settings={settings} reload={reload} notify={notify} /> : null}
-      </div>
-    </section>
+      </Box>
+    </Section>
   );
 }
 
@@ -47,18 +73,18 @@ function Overview({ metrics, bookings, money, settings }) {
   const cards = [["Total listings", metrics?.totalListings || 0, Boxes], ["Open bookings", metrics?.openBookings || 0, ClipboardList], ["Potential monthly revenue", money(metrics?.monthlyRevenue || 0), IndianRupee], ["Utilization", `${metrics?.utilizationPercent || 0}%`, Activity]];
   return (
     <>
-      <div className="section-heading"><div><p className="eyebrow">Overview</p><h2>{settings?.platformName || "RentNest"} operations</h2></div></div>
-      <div className="metrics-grid">{cards.map(([label, value, Icon]) => <article className="metric-card" key={label}><Icon aria-hidden="true" /><span>{label}</span><strong>{value}</strong></article>)}</div>
-      <div className="admin-grid">
-        <section className="admin-panel"><h3>Recent bookings</h3><div className="activity-list">{bookings.slice(0, 6).map((booking) => <article className="activity-row" key={getId(booking)}><div><strong>{booking.listingName}</strong><span>{booking.customer?.name} · {money(booking.total)}</span></div><StatusPill status={booking.status} /></article>)}{!bookings.length ? <p className="muted">No booking requests yet.</p> : null}</div></section>
-        <section className="admin-panel"><h3>Policy snapshot</h3><div className="policy-list"><PolicyItem icon={ShieldCheck} label="Owner verification" value={settings?.ownerVerificationRequired ? "Required" : "Optional"} /><PolicyItem icon={Truck} label="Delivery" value={settings?.deliveryEnabled ? "Enabled" : "Disabled"} /><PolicyItem icon={IndianRupee} label="Platform fee" value={`${settings?.platformFeePercent || 0}%`} /><PolicyItem icon={CalendarCheck} label="Rental window" value={`${settings?.minRentalDays || 1}-${settings?.maxRentalDays || 12} months`} /></div></section>
-      </div>
+      <Box className="section-heading"><Box><Paragraph className="eyebrow">Overview</Paragraph><Heading2>{settings?.platformName || "RentNest"} operations</Heading2></Box></Box>
+      <Box className="metrics-grid">{cards.map(([label, value, Icon]) => <Article className="metric-card" key={label}><Icon aria-hidden="true" /><Span>{label}</Span><Strong>{value}</Strong></Article>)}</Box>
+      <Box className="admin-grid">
+        <Section className="admin-panel"><Heading3>Recent bookings</Heading3><Box className="activity-list">{bookings.slice(0, 6).map((booking) => <Article className="activity-row" key={getId(booking)}><Box><Strong>{booking.listingName}</Strong><Span>{booking.customer?.name} · {money(booking.total)}</Span></Box><StatusPill status={booking.status} /></Article>)}{!bookings.length ? <Paragraph className="muted">No booking requests yet.</Paragraph> : null}</Box></Section>
+        <Section className="admin-panel"><Heading3>Policy snapshot</Heading3><Box className="policy-list"><PolicyItem icon={ShieldCheck} label="Owner verification" value={settings?.ownerVerificationRequired ? "Required" : "Optional"} /><PolicyItem icon={Truck} label="Delivery" value={settings?.deliveryEnabled ? "Enabled" : "Disabled"} /><PolicyItem icon={IndianRupee} label="Platform fee" value={`${settings?.platformFeePercent || 0}%`} /><PolicyItem icon={CalendarCheck} label="Rental window" value={`${settings?.minRentalDays || 1}-${settings?.maxRentalDays || 12} months`} /></Box></Section>
+      </Box>
     </>
   );
 }
 
 function PolicyItem({ icon: Icon, label, value }) {
-  return <div className="policy-item"><Icon aria-hidden="true" /><span>{label}</span><strong>{value}</strong></div>;
+  return <Box className="policy-item"><Icon aria-hidden="true" /><Span>{label}</Span><Strong>{value}</Strong></Box>;
 }
 
 function InventoryManager({ listings, categories, money, reload, notify }) {
@@ -87,24 +113,24 @@ function InventoryManager({ listings, categories, money, reload, notify }) {
 
   return (
     <>
-      <div className="section-heading"><div><p className="eyebrow">Inventory</p><h2>Manage rental supply</h2></div><button className="secondary-action" type="button" onClick={reset}><Plus aria-hidden="true" />New item</button></div>
-      <section className="admin-panel"><form className="admin-form" onSubmit={submit}>
-        <div className="form-grid">
-          <label><span>Item name</span><input value={form.name} onChange={(event) => update("name", event.target.value)} required /></label>
-          <label><span>Category</span><select value={form.category} onChange={(event) => update("category", event.target.value)} required>{categories.map((category) => <option key={getId(category)} value={category.name}>{category.name}</option>)}</select></label>
-          <label><span>Status</span><select value={form.status} onChange={(event) => update("status", event.target.value)}><option value="available">Available</option><option value="pending-review">Pending review</option><option value="rented">Rented</option><option value="maintenance">Maintenance</option><option value="hidden">Hidden</option></select></label>
-          <label><span>Intent</span><select value={form.intent} onChange={(event) => update("intent", event.target.value)}><option value="Home">Home</option><option value="Event">Event</option><option value="Move-in">Move-in</option></select></label>
-          <label><span>Area</span><select value={form.area} onChange={(event) => update("area", event.target.value)} required><option value="">Select locality</option>{serviceLocalities.map((locality) => <option key={locality} value={locality}>{locality}</option>)}</select></label>
-          <label><span>Quantity</span><input type="number" min="0" value={form.quantity} onChange={(event) => update("quantity", event.target.value)} /></label>
-          <label><span>Monthly price</span><input type="number" min="0" value={form.pricePerMonth} onChange={(event) => update("pricePerMonth", event.target.value)} required /></label>
-          <label><span>Deposit</span><input type="number" min="0" value={form.deposit} onChange={(event) => update("deposit", event.target.value)} required /></label>
-          <label><span>Owner</span><input value={form.ownerName} onChange={(event) => update("ownerName", event.target.value)} required /></label>
-          <label><span>Owner phone</span><input value={form.ownerPhone} onChange={(event) => update("ownerPhone", event.target.value)} /></label>
-        </div>
-        <label><span>Description</span><textarea rows="3" value={form.description} onChange={(event) => update("description", event.target.value)} required /></label>
-        <div className="form-actions"><label className="check-row"><input type="checkbox" checked={form.deliveryAvailable} onChange={(event) => update("deliveryAvailable", event.target.checked)} /><span>Delivery available</span></label><label className="check-row"><input type="checkbox" checked={form.ownerVerified} onChange={(event) => update("ownerVerified", event.target.checked)} /><span>Owner verified</span></label><button className="primary-action" type="submit"><Save aria-hidden="true" />{editingId ? "Save Item" : "Create Item"}</button></div>
-      </form></section>
-      <section className="admin-panel table-panel"><div className="table-wrap"><table><thead><tr><th>Item</th><th>Category</th><th>Status</th><th>Price</th><th>Owner</th><th>Actions</th></tr></thead><tbody>{listings.map((item) => <tr key={getId(item)}><td><strong>{item.name}</strong><span>{item.area}</span></td><td>{item.category}</td><td><StatusPill status={item.status} /></td><td>{money(item.pricePerMonth)}</td><td>{item.owner?.name}</td><td><div className="row-actions"><button className="icon-button" type="button" onClick={() => editListing(item)} aria-label={`Edit ${item.name}`} title="Edit"><Pencil aria-hidden="true" /></button><button className="icon-button danger" type="button" onClick={() => remove(getId(item))} aria-label={`Delete ${item.name}`} title="Delete"><Trash2 aria-hidden="true" /></button></div></td></tr>)}</tbody></table></div></section>
+      <Box className="section-heading"><Box><Paragraph className="eyebrow">Inventory</Paragraph><Heading2>Manage rental supply</Heading2></Box><Button className="secondary-action" type="button" onClick={reset}><Plus aria-hidden="true" />New item</Button></Box>
+      <Section className="admin-panel"><Form className="admin-form" onSubmit={submit}>
+        <Box className="form-grid">
+          <Label><Span>Item name</Span><Input value={form.name} onChange={(event) => update("name", event.target.value)} required /></Label>
+          <Label><Span>Category</Span><Select value={form.category} onChange={(event) => update("category", event.target.value)} required>{categories.map((category) => <Option key={getId(category)} value={category.name}>{category.name}</Option>)}</Select></Label>
+          <Label><Span>Status</Span><Select value={form.status} onChange={(event) => update("status", event.target.value)}><Option value="available">Available</Option><Option value="pending-review">Pending review</Option><Option value="rented">Rented</Option><Option value="maintenance">Maintenance</Option><Option value="hidden">Hidden</Option></Select></Label>
+          <Label><Span>Intent</Span><Select value={form.intent} onChange={(event) => update("intent", event.target.value)}><Option value="Home">Home</Option><Option value="Event">Event</Option><Option value="Move-in">Move-in</Option></Select></Label>
+          <Label><Span>Area</Span><Select value={form.area} onChange={(event) => update("area", event.target.value)} required><Option value="">Select locality</Option>{serviceLocalities.map((locality) => <Option key={locality} value={locality}>{locality}</Option>)}</Select></Label>
+          <Label><Span>Quantity</Span><Input type="number" min="0" value={form.quantity} onChange={(event) => update("quantity", event.target.value)} /></Label>
+          <Label><Span>Monthly price</Span><Input type="number" min="0" value={form.pricePerMonth} onChange={(event) => update("pricePerMonth", event.target.value)} required /></Label>
+          <Label><Span>Deposit</Span><Input type="number" min="0" value={form.deposit} onChange={(event) => update("deposit", event.target.value)} required /></Label>
+          <Label><Span>Owner</Span><Input value={form.ownerName} onChange={(event) => update("ownerName", event.target.value)} required /></Label>
+          <Label><Span>Owner phone</Span><Input value={form.ownerPhone} onChange={(event) => update("ownerPhone", event.target.value)} /></Label>
+        </Box>
+        <Label><Span>Description</Span><Textarea rows="3" value={form.description} onChange={(event) => update("description", event.target.value)} required /></Label>
+        <Box className="form-actions"><Label className="check-row"><Input type="checkbox" checked={form.deliveryAvailable} onChange={(event) => update("deliveryAvailable", event.target.checked)} /><Span>Delivery available</Span></Label><Label className="check-row"><Input type="checkbox" checked={form.ownerVerified} onChange={(event) => update("ownerVerified", event.target.checked)} /><Span>Owner verified</Span></Label><Button className="primary-action" type="submit"><Save aria-hidden="true" />{editingId ? "Save Item" : "Create Item"}</Button></Box>
+      </Form></Section>
+      <Section className="admin-panel table-panel"><Box className="table-wrap"><Table><Thead><Tr><Th>Item</Th><Th>Category</Th><Th>Status</Th><Th>Price</Th><Th>Owner</Th><Th>Actions</Th></Tr></Thead><Tbody>{listings.map((item) => <Tr key={getId(item)}><Td><Strong>{item.name}</Strong><Span>{item.area}</Span></Td><Td>{item.category}</Td><Td><StatusPill status={item.status} /></Td><Td>{money(item.pricePerMonth)}</Td><Td>{item.owner?.name}</Td><Td><Box className="row-actions"><Button className="icon-button" type="button" onClick={() => editListing(item)} aria-label={`Edit ${item.name}`} title="Edit"><Pencil aria-hidden="true" /></Button><Button className="icon-button danger" type="button" onClick={() => remove(getId(item))} aria-label={`Delete ${item.name}`} title="Delete"><Trash2 aria-hidden="true" /></Button></Box></Td></Tr>)}</Tbody></Table></Box></Section>
     </>
   );
 }
@@ -113,8 +139,8 @@ function BookingManager({ bookings, money, reload, notify }) {
   const updateStatus = async (id, status) => { await api.updateBooking(id, { status }); await reload(); notify("Booking status updated."); };
   return (
     <>
-      <div className="section-heading"><div><p className="eyebrow">Bookings</p><h2>Approve and track rental requests</h2></div></div>
-      <section className="admin-panel table-panel"><div className="table-wrap"><table><thead><tr><th>Booking</th><th>Customer</th><th>Dates</th><th>Total</th><th>Status</th></tr></thead><tbody>{bookings.map((booking) => <tr key={getId(booking)}><td><strong>{booking.listingName}</strong><span>{booking.months || booking.days || 1} month rental</span></td><td><strong>{booking.customer?.name}</strong><span>{booking.customer?.contact}</span></td><td><span>{String(booking.startDate).slice(0, 10)}</span><span>{String(booking.endDate).slice(0, 10)}</span></td><td>{money(booking.total)}</td><td><select value={booking.status} onChange={(event) => updateStatus(getId(booking), event.target.value)}><option value="pending">Pending</option><option value="approved">Approved</option><option value="active">Active</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></td></tr>)}{!bookings.length ? <tr><td colSpan="5">No booking requests yet.</td></tr> : null}</tbody></table></div></section>
+      <Box className="section-heading"><Box><Paragraph className="eyebrow">Bookings</Paragraph><Heading2>Approve and track rental requests</Heading2></Box></Box>
+      <Section className="admin-panel table-panel"><Box className="table-wrap"><Table><Thead><Tr><Th>Booking</Th><Th>Customer</Th><Th>Dates</Th><Th>Total</Th><Th>Status</Th></Tr></Thead><Tbody>{bookings.map((booking) => <Tr key={getId(booking)}><Td><Strong>{booking.listingName}</Strong><Span>{booking.months || booking.days || 1} month rental</Span></Td><Td><Strong>{booking.customer?.name}</Strong><Span>{booking.customer?.contact}</Span></Td><Td><Span>{String(booking.startDate).slice(0, 10)}</Span><Span>{String(booking.endDate).slice(0, 10)}</Span></Td><Td>{money(booking.total)}</Td><Td><Select value={booking.status} onChange={(event) => updateStatus(getId(booking), event.target.value)}><Option value="pending">Pending</Option><Option value="approved">Approved</Option><Option value="active">Active</Option><Option value="completed">Completed</Option><Option value="cancelled">Cancelled</Option></Select></Td></Tr>)}{!bookings.length ? <Tr><Td colSpan="5">No booking requests yet.</Td></Tr> : null}</Tbody></Table></Box></Section>
     </>
   );
 }
@@ -126,9 +152,9 @@ function CategoryManager({ categories, reload, notify }) {
   const remove = async (category) => { await api.deleteCategory(getId(category)); await reload(); notify("Category deleted."); };
   return (
     <>
-      <div className="section-heading"><div><p className="eyebrow">Categories</p><h2>Manage marketplace structure</h2></div></div>
-      <section className="admin-panel"><form className="admin-form" onSubmit={submit}><div className="form-grid three"><label><span>Name</span><input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required /></label><label><span>Icon key</span><input value={form.icon} onChange={(event) => setForm((current) => ({ ...current, icon: event.target.value }))} /></label><label><span>Description</span><input value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} /></label></div><button className="primary-action" type="submit"><Plus aria-hidden="true" />Add Category</button></form></section>
-      <div className="category-admin-grid">{categories.map((category) => <article className="category-admin-card" key={getId(category)}><div><h3>{category.name}</h3><p>{category.description}</p></div><div className="row-actions"><button className="secondary-action" type="button" onClick={() => toggle(category)}><CheckCircle2 aria-hidden="true" />{category.active ? "Active" : "Paused"}</button><button className="icon-button danger" type="button" onClick={() => remove(category)} aria-label={`Delete ${category.name}`} title="Delete"><Trash2 aria-hidden="true" /></button></div></article>)}</div>
+      <Box className="section-heading"><Box><Paragraph className="eyebrow">Categories</Paragraph><Heading2>Manage marketplace structure</Heading2></Box></Box>
+      <Section className="admin-panel"><Form className="admin-form" onSubmit={submit}><Box className="form-grid three"><Label><Span>Name</Span><Input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} required /></Label><Label><Span>Icon key</Span><Input value={form.icon} onChange={(event) => setForm((current) => ({ ...current, icon: event.target.value }))} /></Label><Label><Span>Description</Span><Input value={form.description} onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))} /></Label></Box><Button className="primary-action" type="submit"><Plus aria-hidden="true" />Add Category</Button></Form></Section>
+      <Box className="category-admin-grid">{categories.map((category) => <Article className="category-admin-card" key={getId(category)}><Box><Heading3>{category.name}</Heading3><Paragraph>{category.description}</Paragraph></Box><Box className="row-actions"><Button className="secondary-action" type="button" onClick={() => toggle(category)}><CheckCircle2 aria-hidden="true" />{category.active ? "Active" : "Paused"}</Button><Button className="icon-button danger" type="button" onClick={() => remove(category)} aria-label={`Delete ${category.name}`} title="Delete"><Trash2 aria-hidden="true" /></Button></Box></Article>)}</Box>
     </>
   );
 }
@@ -140,8 +166,8 @@ function SettingsManager({ settings, reload, notify }) {
   const submit = async (event) => { event.preventDefault(); await api.updateSettings(form); await reload(); notify("Business settings saved."); };
   return (
     <>
-      <div className="section-heading"><div><p className="eyebrow">Settings</p><h2>Business logic and platform rules</h2></div></div>
-      <section className="admin-panel"><form className="admin-form" onSubmit={submit}><div className="form-grid"><label><span>Platform name</span><input value={form.platformName || ""} onChange={(event) => update("platformName", event.target.value)} /></label><label><span>Operating city</span><input value={form.city || ""} onChange={(event) => update("city", event.target.value)} /></label><label><span>Currency</span><input value={form.currency || "INR"} onChange={(event) => update("currency", event.target.value.toUpperCase())} /></label><label><span>Platform fee %</span><input type="number" min="0" value={form.platformFeePercent || 0} onChange={(event) => update("platformFeePercent", Number(event.target.value))} /></label><label><span>Default deposit %</span><input type="number" min="0" value={form.defaultDepositPercent || 0} onChange={(event) => update("defaultDepositPercent", Number(event.target.value))} /></label><label><span>Late fee per month</span><input type="number" min="0" value={form.lateFeePerDay || 0} onChange={(event) => update("lateFeePerDay", Number(event.target.value))} /></label><label><span>Cancellation window hours</span><input type="number" min="0" value={form.cancellationWindowHours || 0} onChange={(event) => update("cancellationWindowHours", Number(event.target.value))} /></label><label><span>Min rental months</span><input type="number" min="1" value={form.minRentalDays || 1} onChange={(event) => update("minRentalDays", Number(event.target.value))} /></label><label><span>Max rental months</span><input type="number" min="1" value={form.maxRentalDays || 30} onChange={(event) => update("maxRentalDays", Number(event.target.value))} /></label><label><span>Support email</span><input value={form.supportEmail || ""} onChange={(event) => update("supportEmail", event.target.value)} /></label><label><span>Support phone</span><input value={form.supportPhone || ""} onChange={(event) => update("supportPhone", event.target.value)} /></label></div><div className="form-actions"><label className="check-row"><input type="checkbox" checked={Boolean(form.deliveryEnabled)} onChange={(event) => update("deliveryEnabled", event.target.checked)} /><span>Delivery enabled</span></label><label className="check-row"><input type="checkbox" checked={Boolean(form.ownerVerificationRequired)} onChange={(event) => update("ownerVerificationRequired", event.target.checked)} /><span>Require owner verification</span></label><label className="check-row"><input type="checkbox" checked={Boolean(form.autoApproveBookings)} onChange={(event) => update("autoApproveBookings", event.target.checked)} /><span>Auto approve bookings</span></label></div><button className="primary-action" type="submit"><SlidersHorizontal aria-hidden="true" />Save Settings</button></form></section>
+      <Box className="section-heading"><Box><Paragraph className="eyebrow">Settings</Paragraph><Heading2>Business logic and platform rules</Heading2></Box></Box>
+      <Section className="admin-panel"><Form className="admin-form" onSubmit={submit}><Box className="form-grid"><Label><Span>Platform name</Span><Input value={form.platformName || ""} onChange={(event) => update("platformName", event.target.value)} /></Label><Label><Span>Operating city</Span><Input value={form.city || ""} onChange={(event) => update("city", event.target.value)} /></Label><Label><Span>Currency</Span><Input value={form.currency || "INR"} onChange={(event) => update("currency", event.target.value.toUpperCase())} /></Label><Label><Span>Platform fee %</Span><Input type="number" min="0" value={form.platformFeePercent || 0} onChange={(event) => update("platformFeePercent", Number(event.target.value))} /></Label><Label><Span>Default deposit %</Span><Input type="number" min="0" value={form.defaultDepositPercent || 0} onChange={(event) => update("defaultDepositPercent", Number(event.target.value))} /></Label><Label><Span>Late fee per month</Span><Input type="number" min="0" value={form.lateFeePerDay || 0} onChange={(event) => update("lateFeePerDay", Number(event.target.value))} /></Label><Label><Span>Cancellation window hours</Span><Input type="number" min="0" value={form.cancellationWindowHours || 0} onChange={(event) => update("cancellationWindowHours", Number(event.target.value))} /></Label><Label><Span>Min rental months</Span><Input type="number" min="1" value={form.minRentalDays || 1} onChange={(event) => update("minRentalDays", Number(event.target.value))} /></Label><Label><Span>Max rental months</Span><Input type="number" min="1" value={form.maxRentalDays || 30} onChange={(event) => update("maxRentalDays", Number(event.target.value))} /></Label><Label><Span>Support email</Span><Input value={form.supportEmail || ""} onChange={(event) => update("supportEmail", event.target.value)} /></Label><Label><Span>Support phone</Span><Input value={form.supportPhone || ""} onChange={(event) => update("supportPhone", event.target.value)} /></Label></Box><Box className="form-actions"><Label className="check-row"><Input type="checkbox" checked={Boolean(form.deliveryEnabled)} onChange={(event) => update("deliveryEnabled", event.target.checked)} /><Span>Delivery enabled</Span></Label><Label className="check-row"><Input type="checkbox" checked={Boolean(form.ownerVerificationRequired)} onChange={(event) => update("ownerVerificationRequired", event.target.checked)} /><Span>Require owner verification</Span></Label><Label className="check-row"><Input type="checkbox" checked={Boolean(form.autoApproveBookings)} onChange={(event) => update("autoApproveBookings", event.target.checked)} /><Span>Auto approve bookings</Span></Label></Box><Button className="primary-action" type="submit"><SlidersHorizontal aria-hidden="true" />Save Settings</Button></Form></Section>
     </>
   );
 }

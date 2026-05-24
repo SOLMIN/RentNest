@@ -1,5 +1,6 @@
 import { statusLabels } from "../../constants/marketplace";
+import { StatusText } from "./styles";
 
 export default function StatusPill({ status }) {
-  return <span className={`status-pill ${status}`}>{statusLabels[status] || status}</span>;
+  return <StatusText className={`status-pill ${status}`}>{statusLabels[status] || status}</StatusText>;
 }

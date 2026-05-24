@@ -1,0 +1,26 @@
+import styled from "@emotion/styled";
+
+export const Box = styled.div``;
+export const Section = styled.section``;
+export const Aside = styled.aside``;
+export const Article = styled.article``;
+export const Nav = styled.nav``;
+export const Button = styled.button``;
+export const Form = styled.form``;
+export const Label = styled.label``;
+export const Input = styled.input``;
+export const Select = styled.select``;
+export const Option = styled.option``;
+export const Textarea = styled.textarea``;
+export const Span = styled.span``;
+export const Strong = styled.strong``;
+export const Heading1 = styled.h1``;
+export const Heading2 = styled.h2``;
+export const Heading3 = styled.h3``;
+export const Paragraph = styled.p``;
+export const Table = styled.table``;
+export const Thead = styled.thead``;
+export const Tbody = styled.tbody``;
+export const Tr = styled.tr``;
+export const Th = styled.th``;
+export const Td = styled.td``;

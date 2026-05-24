@@ -1,31 +1,32 @@
 import { LayoutDashboard, Plus, Store } from "lucide-react";
+import { BrandButton, HeaderRoot, Link, Nav, NavButton, Small, Span, Strong } from "./styles";
 
 export default function Header({ view, setView, health }) {
   return (
-    <header className="topbar">
-      <button className="brand-button" type="button" onClick={() => setView("marketplace")} aria-label="Open marketplace">
-        <span className="brand-mark">RN</span>
-        <span className="brand-copy">
-          <strong>RentNest</strong>
-          <small>{health?.dataMode === "mongodb" ? "MongoDB live" : "Demo data mode"}</small>
-        </span>
-      </button>
+    <HeaderRoot className="topbar">
+      <BrandButton className="brand-button" type="button" onClick={() => setView("marketplace")} aria-label="Open marketplace">
+        <Span className="brand-mark">RN</Span>
+        <Span className="brand-copy">
+          <Strong>RentNest</Strong>
+          <Small>{health?.dataMode === "mongodb" ? "MongoDB live" : "Demo data mode"}</Small>
+        </Span>
+      </BrandButton>
 
-      <nav className="nav-tabs" aria-label="Main views">
-        <button className={view === "marketplace" ? "active" : ""} type="button" onClick={() => setView("marketplace")}>
+      <Nav className="nav-tabs" aria-label="Main views">
+        <NavButton className={view === "marketplace" ? "active" : ""} type="button" onClick={() => setView("marketplace")}>
           <Store aria-hidden="true" />
           Marketplace
-        </button>
-        <button className={view === "admin" ? "active" : ""} type="button" onClick={() => setView("admin")}>
+        </NavButton>
+        <NavButton className={view === "admin" ? "active" : ""} type="button" onClick={() => setView("admin")}>
           <LayoutDashboard aria-hidden="true" />
           Admin Portal
-        </button>
-      </nav>
+        </NavButton>
+      </Nav>
 
-      <a className="header-cta" href="#rent-out">
+      <Link className="header-cta" href="#rent-out">
         <Plus aria-hidden="true" />
         List your item
-      </a>
-    </header>
+      </Link>
+    </HeaderRoot>
   );
 }
